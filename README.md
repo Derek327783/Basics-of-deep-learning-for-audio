@@ -64,3 +64,41 @@ LSTM.add(keras.layers.Dense(10, activation='softmax'))
 - The main thing that allowed me to understand this was that the memory cell that is used in a RNN is the same memomry cell at each time step so it is similar to SGD in the sense that each time step we are looking at one sample.
 - Another thing that helped med understand it was that unlike the previous 2 neural network architectures you cant connect everything through neural network relations i.e. matrix multiplication. Specifically the equation ht = f(xWxh + ht-1Whh+bt). View the x and as like two separate neural networks.
 
+## 7. Transformers
+### 7.1. Encoder
+Inputs  
+- I' = I + P 
+- I where I = seq_len*embed_len (I is attained through neural network that learns best embedding)
+- P where P = seq_len*embed_len (P is attained through a formula)
+
+Single Attention Head  
+- Q = I'Wq where Q = seq_leng*feature_len_k
+- K = I'Wk where Q = seq_leng*feature_len_k
+- V = I'Wv where Q = seq_leng*feature_len_v
+- Z = SoftMax(QKt/sqrt(d))V, seq_len*feature_len_v
+
+Multihead Attention
+- Imagine we have 3 heads, we will then have Z1,Z2,Z3.
+- Output = Concatenate(Z1,Z2,Z3)Wo, seq_length*(3xfeature_len_v)
+
+*** Note that normally we set feature_len_v = embed_len/num_of_heads so that when we go on to the next Add & Norm layer where we add I' to output, the dimensions are consistent. 
+*** Note that feature_len_k != feature_len_v its just that for simplicity sake we set it this way.
+
+### 7.2. Decoder
+
+Main differences
+
+Masked Multi-head Attention: Because the decoder predicts the next word in the sentence, we need to one by one unmask the next word
+- I' = I + P same as encoder 
+- Q = I'Wq same as encoder
+- K = I'Wk same as encoder 
+- V = I'Wv same as encoder
+- Z = SoftMax(QKt/sqrt(d))V , SoftMax(QKt/sqrt(d)) here gets masked so we end up with a triangular matrix with negative infinity
+
+Multi-head Attention
+Let M = input from previous MMHA and R = input from encoder
+- Q = MWq
+- K = RWk
+- V = RWv
+- Z = SoftMax(QKt/sqrt(d))V
+Intuitively, the SoftMax(QKt/sqrt(d)) here represents the probabilistic relation between the decoder input and the encoder input and the V are just content information of the encoder words.
