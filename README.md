@@ -102,3 +102,19 @@ Let M = input from previous MMHA and R = input from encoder
 - V = RWv
 - Z = SoftMax(QKt/sqrt(d))V
 Intuitively, the SoftMax(QKt/sqrt(d)) here represents the probabilistic relation between the decoder input and the encoder input and the V are just content information of the encoder words.
+
+7.3. Training
+***Note that how the training data looks like will be different depending on our use case.
+1. Machine-to-machine translation
+- Input to encoder: English Sentence
+- Input to decoder: Fully translated target language
+
+2. Music Generation
+Assuming we use a symbolic representation like ["A5","E5","C#5","B3","G6"] there are various ways to transform this such that we can fit it into the model but the overarching idea is that input to encoder must contain where we start from and input to decoder must contain where we want to end. So below is an example of how it could work.
+-Input to encoder: ["A5"] or any other subsequence of the example I provided
+-Input to decoder: Any subsequence that follows directly after the encoder sequence.
+
+3. Generating text in English
+- The way we structure it will be quite similar to the music generation example.
+
+*** Forced teacher feature: Basically at every instance when the decoder gives a prediction for the next item in the sequence, even if it is wrong we still make sure that the next iteration we give it the right item which is why we feed the decoder the entire output from the start and mask it later on.
