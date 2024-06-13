@@ -111,8 +111,8 @@ Intuitively, the SoftMax(QKt/sqrt(d)) here represents the probabilistic relation
 
 #### 2. Music Generation
 Assuming we use a symbolic representation like ["A5","E5","C#5","B3","G6"] there are various ways to transform this such that we can fit it into the model but the overarching idea is that input to encoder must contain where we start from and input to decoder must contain where we want to end. So below is an example of how it could work.
--Input to encoder: ["A5"] or any other subsequence of the example I provided
--Input to decoder: Any subsequence that follows directly after the encoder sequence.
+- Input to encoder: ["A5"] or any other subsequence of the example I provided
+- Input to decoder: Any subsequence that follows directly after the encoder sequence.
 
 #### 3. Generating text in English
 - The way we structure it will be quite similar to the music generation example.
